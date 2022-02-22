@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  database:
+    image: mysql
+    container_name: vagasdb_container
+    volumes:
+      - ./database/:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: vagas
+      MYSQL_ROOT_PASSWORD: '154263789'
+    ports:
+      - '9309:3306'
+    networks:
+      - backend
+  api:
+    build: './api'
+    container_name: vagasapi_container
+    volumes:
+      - ./:/home/Documents/DockerVagas
+    command: npm run start
+    ports:
+      - '3000:3000'
+    networks:
+      - backend
+  front:
+    build: './front'
+    container_name: vagasfront_container
+    volumes:
+      - ./front/:/home/Documents/DockerVagas
+    ports: 
+      - "9000:8080"
+    command: ["npm", "run", "serve"]
+    networks:
+      - backend
+
+networks:
+  backend:
