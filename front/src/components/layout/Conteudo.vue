@@ -1,5 +1,5 @@
 <template>
-    <keep-alive>
+    <keep-alive class="mt-5">
         <component :is="view" />
     </keep-alive>
 </template>

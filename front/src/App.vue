@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navbar @navegate="nextView = $event" />,
+    <Navbar @navegate="nextView = $event" />
     <Conteudo :view="nextView" />
   </div>
 </template>
