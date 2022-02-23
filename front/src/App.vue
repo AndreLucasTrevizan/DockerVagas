@@ -1,39 +1,27 @@
 <template>
   <div>
-    <Navbar @navegar="componente = $event"/>
-    <Alerta v-if="exibirAlerta" :vaga="vaga" />
-    <div class="container">
-      <Conteudo :conteudo="componente" />
-    </div>
+    <Navbar @navegate="nextView = $event" />,
+    <Conteudo :view="nextView" />
   </div>
 </template>
 
 <script>
-import Navbar from '@/components/layouts/Topo.vue';
-import Conteudo from '@/components/layouts/Conteudo.vue';
-import Alerta from '@/components/common/Alerta.vue';
+import Navbar from '@/components/layout/Navbar.vue';
+import Conteudo from '@/components/layout/Conteudo.vue'
 
 export default {
   name: 'App',
   components: {
     Navbar,
-    Conteudo,
-    Alerta
+    Conteudo
   },
   data: () => ({
-    componente: 'Home',
-    exibirAlerta: false,
-    vaga: null
+    nextView: 'Home'
   }),
   mounted() {
-    this.emitter.on('VagaPublicada', (vaga) => {
-      this.vaga = vaga;
-      setTimeout(() => this.exibirAlerta = true, 3200);
+    this.emitter.on('navegate', (view) => {
+        this.nextView = view;
     });
   }
 }
 </script>
-
-<style>
-
-</style>
