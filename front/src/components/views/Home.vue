@@ -1,45 +1,72 @@
 <template>
-    <div class="container">
-        <div class="row mt-3">
-            <div class="col h-100 p-4 border rounded-3">
-                <h3>Pesquisar Vaga</h3>
-                <div class="form-group mt-2">
-                    <input type="text" class="form-control" placeholder="Pesquise a vaga usando palavras chave 'PHP', Javascript', 'Analista'">
-                    <small>Pesquise por vagas que tenha interesse</small>
-                </div>
-                <button class="btn btn-dark mt-5">Buscar</button>
+    <div class="container py-4">
+        <div class="row">
+            <div class="col">
+                <PesquisarVaga />
             </div>
         </div>
 
-        <div v-for="(vaga, index) in vagas" :key="index">
-                <div class="card mt-2">
-                    <div class="card-header bg-dark text-white">
-                        <h3>{{ vaga.title }}</h3>
-                    </div>
-                    <div class="card-body">
-                        {{ vaga.job_description }}
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">Salário: {{ vaga.salary }} | Modalidade: {{ (vaga.modality == 1) ? 'Homeoffice' : 'Presencial'}} | Tipo: {{ (vaga.job_type == 1) ? 'CLT' : 'PJ' }}</small>
-                    </div>
-                </div>
+        <lista-vagas v-slot:default="slotProps">
+            <div class="text-center p-5" v-if="slotProps.quantidadeVagas === null">
+                <h3>Nenhuma vaga foi cadastrada por enquanto...</h3>
             </div>
+        </lista-vagas>
+
+        <div class="row mt-5">
+            <div class="col-4">
+                <Indicador
+                    titulo="Vagas Abertas"
+                    indicador="100"
+                    bg="bg-dark"
+                    color="text-white"
+                />
+            </div>
+            <div class="col-4">
+                <Indicador
+                    titulo="Profissionais Cadastrados"
+                    indicador="250"
+                    bg="bg-dark"
+                    color="text-white"
+                />
+            </div>
+            <div class="col-4">
+                <Indicador 
+                    titulo="Visitantes Online"
+                    :indicador="usuariosOnline"
+                    bg="bg-light"
+                    color="text-dark"
+                />
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import axios from 'axios';
-import config from '@/config/config.js';
+import ListaVagas from '@/components/common/ListaVagas.vue';
+import PesquisarVaga from '../common/PesquisarVaga.vue';
+import Indicador from '../common/Indicador.vue';
 
 export default {
     name: 'Home',
+    components: {
+        PesquisarVaga,
+        Indicador,
+        ListaVagas
+    },
     data: () => ({
-        vagas: null
+        usuariosOnline: 0,
     }),
-    activated() {
-        axios.get(config.API + 'vagas').then(res => {
-            this.vagas = res.data.vagas;
-        });
+    methods: {
+        getUsuariosOnline() {
+            this.usuariosOnline = Math.floor(Math.random() * 101)
+        }
+    },
+    created() {
+        setInterval(this.getUsuariosOnline, 1000);
     }
 }
 </script>
+
+<style scoped>
+
+</style>
